@@ -31,15 +31,16 @@ public class Arena {
     }
 
     public void commencerDuel() {
-        System.out.println("\n--- Duell en arène ---");
+        // Reset player's HP to full before each duel
+        joueur.pointsDeVie = joueur.pointsDeVieMax();
+
+        System.out.println("\n--- Duel en arène ---");
         System.out.println("Votre adversaire est : " + adversaire.getNom());
 
         while (joueur.estVivant() && adversaire.estVivant()) {
             // Player's turn
             System.out.println("\nC'est votre tour, " + joueur.getNom() + "!");
-            System.out.println("1. Attaquer");
-            System.out.println("2. Se défendre");
-            System.out.println("3. Utiliser une compétence spéciale");
+            UI.printCombatMenu();
             int choix = scanner.nextInt();
             scanner.nextLine();  // Consume newline
 
@@ -50,6 +51,8 @@ public class Arena {
                 case 2:
                     if (joueur instanceof Guerrier) {
                         ((Guerrier) joueur).activerDefense();
+                    } else if (joueur instanceof Voleur) {
+                        ((Voleur) joueur).activerInvisibilite();
                     } else {
                         System.out.println("Votre personnage ne peut pas se défendre.");
                     }
@@ -78,16 +81,14 @@ public class Arena {
 
             // End of round status
             System.out.println("\n--- État après tour ---");
-            System.out.println(joueur.getNom() + " - Vie: " + joueur.pointsDeVie + ", XP: " + joueur.experience);
-            System.out.println(adversaire.getNom() + " - Vie: " + adversaire.pointsDeVie);
+            UI.printCharacterStatus(joueur);
+            UI.printCharacterStatus(adversaire);
         }
 
         if (joueur.estVivant()) {
-            System.out.println("\n" + joueur.getNom() + " a gagné le duel !");
+            UI.printVictoryScreen(joueur.getNom());
         } else {
-            System.out.println("\n" + joueur.getNom() + " a perdu le duel.");
+            UI.printGameOver();
         }
-
-        scanner.close();
     }
 }

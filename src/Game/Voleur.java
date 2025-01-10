@@ -4,7 +4,7 @@ class Voleur extends Personnage {
     private boolean invisible;
 
     public Voleur(String nom) {
-        super(nom, 70, 12);
+        super(nom, 70, 12); // Initial stats for Voleur
         this.invisible = false;
     }
 
@@ -28,7 +28,13 @@ class Voleur extends Personnage {
     @Override
     public void utiliserCompetence(Personnage cible) {
         System.out.println(nom + " utilise sa compétence spéciale : Attaque rapide !");
-        cible.recevoirDegats(degats * 3);
+        int actualDamage = degats * 3;
+        if (invisible) {
+            actualDamage += 5; // Bonus damage if invisible
+            System.out.println(nom + " inflige des dégâts supplémentaires car il est invisible.");
+            invisible = false; // Invisibility ends after attack
+        }
+        cible.recevoirDegats(actualDamage);
     }
 
     public void activerInvisibilite() {
@@ -47,7 +53,7 @@ class Voleur extends Personnage {
     }
 
     @Override
-    public void ameliorerStats() {
+    protected void ameliorerStats() {
         niveau++;
         pointsDeVie += 5;  // Increase HP per level
         degats += 4;  // Increase damage per level

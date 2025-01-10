@@ -4,8 +4,7 @@ public class UI {
     public static void printMainMenu() {
         System.out.println("Welcome to the Shadow Adventurers!");
         System.out.println("1. Start Game");
-        System.out.println("2. View Stats");
-        System.out.println("3. Exit");
+        System.out.println("2. Exit");
     }
 
     public static void printCombatMenu() {
@@ -23,17 +22,6 @@ public class UI {
         System.out.println("Level: " + character.niveau);
         System.out.println("Damage: " + character.degats);
         System.out.println("--------------------------");
-    }
-
-    // Method to return character status as a string for use in the GUI
-    public static String getCharacterStatus(Personnage character) {
-        return "---- Character Status ----\n" +
-                "Name: " + character.getNom() + "\n" +
-                "HP: " + character.pointsDeVie + "/" + character.pointsDeVieMax() + "\n" +
-                "XP: " + character.experience + "/" + character.xpForNextLevel + "\n" +
-                "Level: " + character.niveau + "\n" +
-                "Damage: " + character.degats + "\n" +
-                "--------------------------";
     }
 
     public static void printBattleLog(String message) {
