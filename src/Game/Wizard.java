@@ -1,11 +1,16 @@
 package Game;
 
-class Mage extends Personnage {
+class Wizard extends Character {
     private int mana;
     private static final int MAX_MANA = 100;
 
-    public Mage(String nom) {
+    public Wizard(String nom) {
         super(nom, 80, 15);
+        this.mana = MAX_MANA;
+    }
+
+    public Wizard(String nom, int niveau) {
+        super(nom, 80, 15, niveau);
         this.mana = MAX_MANA;
     }
 
@@ -29,20 +34,20 @@ class Mage extends Personnage {
     }
 
     @Override
-    public void attaquer(Personnage cible) {
+    public void attaquer(Character cible) {
         System.out.println(nom + " lance un sort de base sur " + cible.getNom() + " !");
         cible.recevoirDegats(degats);
     }
 
     @Override
-    public void utiliserCompetence(Personnage cible) {
+    public void utiliserCompetence(Character cible) {
         if (checkMana(30)) {
             System.out.println(nom + " invoque une tempête magique !");
             cible.recevoirDegats(degats + 10);
         }
     }
 
-    public void lancerBouleDeFeu(Personnage cible) {
+    public void lancerBouleDeFeu(Character cible) {
         if (checkMana(20)) {
             System.out.println(nom + " lance une boule de feu sur " + cible.getNom() + " !");
             cible.recevoirDegats(degats + 15);

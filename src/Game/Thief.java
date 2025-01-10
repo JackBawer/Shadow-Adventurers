@@ -1,15 +1,20 @@
 package Game;
 
-class Voleur extends Personnage {
+class Thief extends Character {
     private boolean invisible;
 
-    public Voleur(String nom) {
-        super(nom, 70, 12); // Initial stats for Voleur
+    public Thief(String nom) {
+        super(nom, 70, 12); // Initial stats for Thief
+        this.invisible = false;
+    }
+
+    public Thief(String nom, int niveau) {
+        super(nom, 70, 12, niveau); // Initial stats for Thief with level
         this.invisible = false;
     }
 
     @Override
-    public void attaquer(Personnage cible) {
+    public void attaquer(Character cible) {
         System.out.println(nom + " attaque furtivement " + cible.getNom() + " !");
         int actualDamage = degats;
 
@@ -26,7 +31,7 @@ class Voleur extends Personnage {
     }
 
     @Override
-    public void utiliserCompetence(Personnage cible) {
+    public void utiliserCompetence(Character cible) {
         System.out.println(nom + " utilise sa compétence spéciale : Attaque rapide !");
         int actualDamage = degats * 3;
         if (invisible) {

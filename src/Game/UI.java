@@ -10,14 +10,14 @@ public class UI {
     public static void printCombatMenu() {
         System.out.println("\nChoose your action:");
         System.out.println("1. Attack");
-        System.out.println("2. Defend");
+        System.out.println("2. Defend/Regenerate Mana");
         System.out.println("3. Special Ability");
     }
 
-    public static void printCharacterStatus(Personnage character) {
+    public static void printCharacterStatus(Character character) {
         System.out.println("\n---- Character Status ----");
         System.out.println("Name: " + character.getNom());
-        System.out.println("HP: " + character.pointsDeVie + "/" + character.pointsDeVieMax());
+        System.out.println("HP: " + character.pointsDeVie + "/" + character.getMaxHp());
         System.out.println("XP: " + character.experience + "/" + character.xpForNextLevel);
         System.out.println("Level: " + character.niveau);
         System.out.println("Damage: " + character.degats);

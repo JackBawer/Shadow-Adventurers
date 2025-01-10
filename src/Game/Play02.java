@@ -6,9 +6,9 @@ public class Play02 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        Personnage guerrier = new Guerrier("Thor");
-        Personnage mage = new Mage("floki");
-        Personnage voleur = new Voleur("Loki");
+        Character guerrier = new Warrior("Thor");
+        Character mage = new Wizard("floki");
+        Character voleur = new Thief("Loki");
         int choix;
         // Choix du personnage par le joueur
 
@@ -18,7 +18,7 @@ public class Play02 {
         System.out.println("3. Voleur");
 
          choix = scanner.nextInt();
-        Personnage joueur;
+        Character joueur;
         switch (choix) {
             case 1:
                 joueur = guerrier;

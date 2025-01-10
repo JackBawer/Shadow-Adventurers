@@ -4,89 +4,105 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Arena {
-    private Personnage joueur;
-    private Personnage adversaire;
+    private Character player;
+    private Character opponent;
     private Scanner scanner;
+    private static int duelCount = 0; // Track the number of duels
 
-    public Arena(Personnage joueur) {
-        this.joueur = joueur;
+    public Arena(Character player) {
+        this.player = player;
         this.scanner = new Scanner(System.in);
-        this.adversaire = generateAdversaire();  // Generate a random AI opponent
+        this.opponent = generateOpponent();  // Generate a random AI opponent
     }
 
-    private Personnage generateAdversaire() {
-        // Randomly select an AI opponent (could be Guerrier, Mage, or Voleur)
+    private Character generateOpponent() {
+        duelCount++;
+        // Randomly select an AI opponent (could be Warrior, Wizard, or Thief)
         Random rand = new Random();
         int choice = rand.nextInt(3);
+        String opponentName = "Shadow ";
+
         switch (choice) {
             case 0:
-                return new Guerrier("AI Guerrier");
+                opponentName += "Warrior";
+                return new Warrior(opponentName, duelCount);
             case 1:
-                return new Mage("AI Mage");
+                opponentName += "Wizard";
+                return new Wizard(opponentName, duelCount);
             case 2:
-                return new Voleur("AI Voleur");
+                opponentName += "Thief";
+                return new Thief(opponentName, duelCount);
             default:
-                return new Guerrier("AI Guerrier");  // Default case
+                opponentName += "Warrior";
+                return new Warrior(opponentName, duelCount);  // Default case
         }
     }
 
-    public void commencerDuel() {
+    public void startDuel() {
         // Reset player's HP to full before each duel
-        joueur.pointsDeVie = joueur.pointsDeVieMax();
+        player.setHp(player.getMaxHp());
 
-        System.out.println("\n--- Duel en arène ---");
-        System.out.println("Votre adversaire est : " + adversaire.getNom());
+        System.out.println("\n--- Duel in the Arena ---");
+        System.out.println("Your opponent is: " + opponent.getNom());
 
-        while (joueur.estVivant() && adversaire.estVivant()) {
+        while (player.estVivant() && opponent.estVivant()) {
             // Player's turn
-            System.out.println("\nC'est votre tour, " + joueur.getNom() + "!");
+            System.out.println("\nIt's your turn, " + player.getNom() + "!");
             UI.printCombatMenu();
-            int choix = scanner.nextInt();
+            int choice = scanner.nextInt();
             scanner.nextLine();  // Consume newline
 
-            switch (choix) {
+            switch (choice) {
                 case 1:
-                    joueur.attaquer(adversaire);
+                    player.attaquer(opponent);
+                    Story.displayBattleDescription("attack", player.getNom(), opponent.getNom(), player.getDegats());
                     break;
                 case 2:
-                    if (joueur instanceof Guerrier) {
-                        ((Guerrier) joueur).activerDefense();
-                    } else if (joueur instanceof Voleur) {
-                        ((Voleur) joueur).activerInvisibilite();
+                    if (player instanceof Warrior) {
+                        ((Warrior) player).activerDefense();
+                        Story.displayBattleDescription("defend", player.getNom(), opponent.getNom(), 0);
+                    } else if (player instanceof Thief) {
+                        ((Thief) player).activerInvisibilite();
+                        Story.displayBattleDescription("defend", player.getNom(), opponent.getNom(), 0);
+                    } else if (player instanceof Wizard) {
+                        ((Wizard) player).regenererMana();
+                        Story.displayBattleDescription("defend", player.getNom(), opponent.getNom(), 0);
                     } else {
-                        System.out.println("Votre personnage ne peut pas se défendre.");
+                        System.out.println("Your character cannot defend.");
                     }
                     break;
                 case 3:
-                    joueur.utiliserCompetence(adversaire);
+                    player.utiliserCompetence(opponent);
+                    Story.displayBattleDescription("special", player.getNom(), opponent.getNom(), player.getDegats() * 2);
                     break;
                 default:
-                    System.out.println("Choix invalide.");
+                    System.out.println("Invalid choice.");
             }
 
-            if (!adversaire.estVivant()) {
-                System.out.println(adversaire.getNom() + " est vaincu !");
-                joueur.gagnerExperience(50);  // Reward for defeating opponent
+            if (!opponent.estVivant()) {
+                System.out.println(opponent.getNom() + " is defeated!");
+                player.gagnerExperience(50);  // Reward for defeating opponent
                 break;
             }
 
             // AI's turn (simple AI that attacks the player)
-            System.out.println("\nC'est le tour de l'adversaire, " + adversaire.getNom() + "!");
-            adversaire.attaquer(joueur);
+            System.out.println("\nIt's the opponent's turn, " + opponent.getNom() + "!");
+            opponent.attaquer(player);
+            Story.displayBattleDescription("attack", opponent.getNom(), player.getNom(), opponent.getDegats());
 
-            if (!joueur.estVivant()) {
-                System.out.println(joueur.getNom() + " est vaincu !");
+            if (!player.estVivant()) {
+                System.out.println(player.getNom() + " is defeated!");
                 break;
             }
 
             // End of round status
-            System.out.println("\n--- État après tour ---");
-            UI.printCharacterStatus(joueur);
-            UI.printCharacterStatus(adversaire);
+            System.out.println("\n--- Status after the round ---");
+            UI.printCharacterStatus(player);
+            UI.printCharacterStatus(opponent);
         }
 
-        if (joueur.estVivant()) {
-            UI.printVictoryScreen(joueur.getNom());
+        if (player.estVivant()) {
+            UI.printVictoryScreen(player.getNom());
         } else {
             UI.printGameOver();
         }

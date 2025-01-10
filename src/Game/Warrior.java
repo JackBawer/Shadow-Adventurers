@@ -1,15 +1,20 @@
 package Game;
 
-class Guerrier extends Personnage {
+class Warrior extends Character {
     private boolean enDefense;
 
-    public Guerrier(String nom) {
+    public Warrior(String nom) {
         super(nom, 100, 10);
         this.enDefense = false;
     }
 
+    public Warrior(String nom, int niveau) {
+        super(nom, 100, 10, niveau);
+        this.enDefense = false;
+    }
+
     @Override
-    public void attaquer(Personnage cible) {
+    public void attaquer(Character cible) {
         System.out.println(nom + " attaque " + cible.getNom() + " !");
         int actualDamage = degats;
         if (pointsDeVie <= 30) { // Adrenaline Rush
@@ -20,7 +25,7 @@ class Guerrier extends Personnage {
     }
 
     @Override
-    public void utiliserCompetence(Personnage cible) {
+    public void utiliserCompetence(Character cible) {
         System.out.println(nom + " utilise sa compétence spéciale : Coup de rage !");
         int actualDamage = degats * 2;
         if (pointsDeVie <= 30) { // Adrenaline Rush affects the special skill too
@@ -45,10 +50,8 @@ class Guerrier extends Personnage {
         super.recevoirDegats(degats);
     }
 
-    // Implementing ameliorerStats method to improve stats when leveling up
     @Override
     protected void ameliorerStats() {
-        // Increase max health and damage on level-up
         pointsDeVie += 20; // Increase health by 20 per level
         degats += 5; // Increase damage by 5 per level
         System.out.println(nom + " améliore ses stats : Points de vie et dégâts augmentés !");
